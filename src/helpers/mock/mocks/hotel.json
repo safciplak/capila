@@ -1,0 +1,26 @@
+{
+  "data": {
+      "guid": "2dd243c3-927f-4aae-b5fe-c15ac79e52a3",
+      "systemName": "theaterhotel",
+      "code": "ALM",
+      "currency": "EUR",
+      "name": "Theaterhotel Almelo",
+      "slug": "theater-hotel",
+      "image": "https://assets.vandervalkonline.com/inc/hotels/29/desktop-retina/carousel_wide_1024x768_pandtheaterhotel%252D1%252Ejpg",
+      "website": "https://www.theaterhotel.nl",
+      "checkInTime": "15:00",
+      "prepaidPercentage": 0,
+      "stars": 4,
+      "address": {
+        "city": "Almelo",
+        "street": "Schouwburgplein",
+        "streetNumber": "1",
+        "streetNumberAddition": "",
+        "postalCode": "7607AE",
+        "countryCode": "NL",
+        "gps": "",
+        "latitude": 52.3556411,
+        "longitude": 6.66713349999998
+      }
+    }
+}

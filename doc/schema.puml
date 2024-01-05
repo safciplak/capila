@@ -1,0 +1,10 @@
+@startuml
+package test {
+	Bob-down->Alice
+	Bob->Arie
+	Arie->Alice
+}
+package tester {
+	a-down->b
+}
+@enduml

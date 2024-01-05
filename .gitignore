@@ -1,0 +1,19 @@
+# IGNORED DIRECTORIES
+/.vscode/*
+/.idea
+/vendor
+
+# IGNORED FILES
+.DS_Store
+*.bak
+*.code-workspace
+*.env
+*.test
+*.out
+coverage.*
+debug.*
+debug
+
+/src/cli/cli
+__debug_bin
+/capila

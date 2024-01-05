@@ -1,0 +1,17 @@
+---
+version: '3.7'
+
+services:
+
+  capila-debug:
+    container_name: capila-debug
+    build:
+      context: ../
+      dockerfile: build/Dockerfile
+      target: development
+    command: '/usr/bin/supervisord'
+    volumes:
+      - ../:/app/:cached
+
+volumes:
+  capila:

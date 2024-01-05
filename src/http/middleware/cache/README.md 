@@ -1,0 +1,104 @@
+# Cache Middleware
+
+Cache middleware for [Gin Web Framework](https://github.com/gin-gonic/gin) designed to intercept responses and cache them.
+This middleware will cache the `Body`, `Header` (Optional) and `StatusCode` under 300 http status codes.
+
+It supports the `Accept-Language` header for different responses and storing to cache store.
+
+Request Directives<br>
+`Cache-Control: no-cache` will return the up-to-date response but still caches it or does not touch the actual cache.
+`Cache-Control: no-store` will return the up-to-date response and remove the actual cache from cache store.
+
+Notes:
+This middleware designed to work with go-gin library.
+
+## Table of Contents
+
+- [Table of Contents](#table-of-contents)
+- [Signatures](#signatures)
+- [Examples](#examples)
+    - [Cache](#cache)
+    - [Cache Without Query](#cache-without-query)
+    - [Cache Without Header](#cache-without-header)
+    - [Cache Page Atomic](#cache-page-atomic)
+
+## Examples
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"time"
+
+	"github.com/gin-gonic/gin"
+
+	helpers "github.com/safciplak/capila/src/helpers/environment"
+	"github.com/safciplak/capila/src/http/middleware/cache"
+	"github.com/safciplak/capila/src/http/middleware/cache/persistence"
+	"github.com/safciplak/capila/src/http/middleware/cache/utils"
+)
+
+func main() {
+	r := gin.Default()
+
+	environmentHelper := helpers.NewEnvironmentHelper()
+	basicAuth := gin.Accounts{
+        "user": "password",
+    }
+
+	isMiddlewareCacheActive, _ := environmentHelper.GetBoolean("MIDDLEWARE_CACHE_ACTIVE")
+	cachePrefix := utils.URLEscape(environmentHelper.Get("APPLICATION_NAME"), persistence.PageCachePrefix)
+	store := persistence.NewRedisStore(environmentHelper, cachePrefix)
+	cacheMiddleware := cache.New(environmentHelper.Get("APPLICATION_NAME"), isMiddlewareCacheActive, store)
+
+    // Without cache
+	r.GET("/hotels", func(c *gin.Context) {
+		c.String(200, "pong "+fmt.Sprint(time.Now().Unix()))
+	})
+
+	// Cached Page
+	r.GET("/hotels_cache", cacheMiddleware.Page(time.Hour), func(c *gin.Context) {
+		c.String(200, fmt.Sprint(time.Now().Unix()))
+	})
+
+	// Cache Page with auth middleware
+	r.GET("/hotels_cache_auth", gin.BasicAuth(basicAuth), cacheMiddleware.Page(time.Hour), func(c *gin.Context) {
+		c.String(200, fmt.Sprint(time.Now().Unix()))
+	})
+
+	// Listen and Server in 0.0.0.0:1903
+	r.Run(":1903")
+}
+```
+
+### Cache
+cache.Page caches page with full url using the context.Request.URL
+
+```go
+cacheMiddleware.Page(expireTimeDuration)
+```
+
+### Cache Without Query
+cache.PageWithoutQuery caches page with the url using the context.Request.URL.Path
+
+```go
+cacheMiddleware.PageWithoutQuery(expireTimeDuration)
+```
+
+### Cache Without Header
+cache.PageWithoutHeader caches page with full url using the context.Request.URL and does not store the header values
+
+```go
+cacheMiddleware.PageWithoutHeader(expireTimeDuration)
+```
+
+### Cache Page Atomic
+cache.PageAtomic works like cache.Page but it will lock the context and ensures that cache write is atomic
+
+```go
+cacheMiddleware.PageAtomic(expireTimeDuration)
+```
+
+

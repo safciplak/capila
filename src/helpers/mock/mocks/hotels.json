@@ -1,0 +1,52 @@
+{
+  "data": [
+    {
+      "guid": "2dd243c3-927f-4aae-b5fe-c15ac79e52a3",
+      "systemName": "theaterhotel",
+      "code": "ALM",
+      "currency": "EUR",
+      "name": "Theaterhotel Almelo",
+      "slug": "theater-hotel",
+      "image": "https://assets.vandervalkonline.com/inc/hotels/29/desktop-retina/carousel_wide_1024x768_pandtheaterhotel%252D1%252Ejpg",
+      "website": "https://www.theaterhotel.nl",
+      "checkInTime": "15:00",
+      "prepaidPercentage": 0,
+      "stars": 4,
+      "address": {
+        "city": "Almelo",
+        "street": "Schouwburgplein",
+        "streetNumber": "1",
+        "streetNumberAddition": "",
+        "postalCode": "7607AE",
+        "countryCode": "NL",
+        "gps": "",
+        "latitude": 52.3556411,
+        "longitude": 6.66713349999998
+      }
+    },
+    {
+      "guid": "5734c6c3-9824-44dc-9948-f5d180543188",
+      "systemName": "hotel-amersfoort-a1",
+      "code": "AME",
+      "currency": "EUR",
+      "name": "Hotel Amersfoort-A1",
+      "slug": "hotel-amersfoort-a1",
+      "image": "https://assets.vandervalkonline.com/inc/hotels/37/desktop-retina/carousel_wide_1024x768_fotoalbum12%252Ejpg",
+      "website": "https://www.hotelamersfoorta1.nl",
+      "checkInTime": "15:00",
+      "prepaidPercentage": 100,
+      "stars": 4,
+      "address": {
+        "city": "Amersfoort",
+        "street": "Ruimtevaart",
+        "streetNumber": "22",
+        "streetNumberAddition": "",
+        "postalCode": "3824MX",
+        "countryCode": "NL",
+        "gps": "",
+        "latitude": 52.1964122,
+        "longitude": 5.3966974
+      }
+    }
+  ]
+}

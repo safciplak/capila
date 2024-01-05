@@ -1,0 +1,55 @@
+---
+image:
+  name: aanzeenl/go-pipeline
+  username: $DOCKER_HUB_USERNAME
+  password: $DOCKER_HUB_PASSWORD
+
+definitions:
+  steps:
+    - step: &lint
+        name: 'Lint'
+        script:
+          - mkdir reports
+          - golangci-lint run --out-format checkstyle --path-prefix="${PWD}" | tee ./reports/checkstyle-result.xml
+        after-script:
+          - pipe: atlassian/checkstyle-report:0.2.0
+            variables:
+              REPORT_FAIL_SEVERITY: 'warn'
+        artifacts:
+          - reports/**
+    - step: &unit-test
+        name: 'Unit test'
+        script:
+          - mkdir test-reports
+          - mkdir reports
+          - go install gotest.tools/gotestsum@latest
+          - gotestsum --jsonfile ./reports/gotest-report.json --junitfile ./test-reports/gotest-report.xml -- -coverprofile=./reports/gotest-coverage.out ./...
+        artifacts:
+          - reports/**
+    - step: &sonar
+        name: 'Sonar Scanner'
+        image:
+          name: aanzeenl/sonarqube-pipeline
+          username: $DOCKER_HUB_USERNAME
+          password: $DOCKER_HUB_PASSWORD
+        script:
+          - git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+          - git fetch --depth=10000 origin
+          - PROJECT_VERSION=$(git describe --tags $(git rev-list --tags --max-count=1))
+          - bash sonarqube.sh
+    - step: &vulnerabilityCheck
+        name: 'Vulnerability check'
+        script:
+          - govulncheck ./...
+
+pipelines:
+  # Pull requests will be automatically sent to sonarqube
+  pull-requests:
+    '**':
+      - parallel:
+          - step: *lint
+          - step: *unit-test
+      - parallel:
+          - step: *sonar
+          - step: *vulnerabilityCheck
+...
